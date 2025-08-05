@@ -5,6 +5,7 @@
 #include<queue>
 #include<stack>
 #include<algorithm>
+#include<limits.h>
 
 using namespace std;
 template <typename T>
@@ -389,7 +390,59 @@ vector<int> shortestpath(vector<pair<int,int>> edges,int n,int m ,int s,int t) {
 
 }
 
-//shortest path in directed acyclic path
+//shortest path in directed acyclic path using topo sort in weifhted directed garphs
+
+void tsort(int n,unordered_map<int,bool> &visited,stack<int> &s,unordered_map<int,list<pair<int,int>>> &adj) {
+    visited[n]=true;
+
+    for(auto neighbour:adj[n]) {
+        if(!visited[neighbour.first]) {
+            tsort(neighbour.first,visited,s,adj);
+        }
+    }
+    s.push(n);
+}
+vector<int> shortpathfrom_source(int n,int source) {
+    unordered_map<int,list<pair<int,int>>> adj;
+    int u,v,weight;
+    for(int i=0;i<n;i++) {
+        cout<<" enter u v and weight betwwen them :"<<endl;
+        cin>>u>>v>>weight;
+        pair<int,int> p=make_pair(v,weight);
+        adj[u].push_back(p);
+    }
+    unordered_map<int,bool> visited;
+    stack<int> s;
+    for(int i=0;i<n;i++) {
+        if(!visited[i]) {
+            tsort(i,visited,s,adj);
+        }
+
+    }
+
+    vector<int> dis(n);
+
+    for(int i=0;i<n;i++ ) {
+        dis[i]=INT_MAX;
+    }
+     
+    dis[source]=0;
+    while(!s.empty()) {
+        int top=s.top();
+        s.pop();
+
+        if(dis[top]!=INT_MAX) {
+            for(auto i:adj[top]) {
+                if(dis[top] + i.second<dis[i.first]) {
+                    dis[i.first]=dis[top]+i.second;
+                }
+            }
+        }
+    }
+
+     
+
+}
  
 
 int main() {
