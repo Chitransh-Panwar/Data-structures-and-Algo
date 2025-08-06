@@ -439,11 +439,55 @@ vector<int> shortpathfrom_source(int n,int source) {
             }
         }
     }
-
-     
-
 }
  
+
+//dijkistra,s algo
+vector<int> dajikistra(int n,int source) {
+    unordered_map<int,list<pair<int,int>>> adj;
+    int u, v, weight, edges;
+
+    cout << "Enter number of edges: ";
+    cin >> edges;
+    for(int i=0;i<n;i++) {
+        cout<<" enter u v and weight betwwen them :"<<endl;
+        cin>>u>>v>>weight;
+        pair<int,int> p=make_pair(v,weight);
+        adj[u].push_back(p);
+        adj[v].push_back(make_pair(u,weight));
+    }
+
+    vector<int> dis(n);
+    for(int i=0;i<n;i++) {
+        dis[i]=INT_MAX;
+    }
+
+    set<pair<int,int>> s;
+    dis[source]=0;
+
+    while(!s.empty()) {
+        auto top=*(s.begin());
+        int node_dis=top.first;
+        int topnode=top.second;
+
+        s.erase(s.begin());
+
+        for(auto neighbour : adj[topnode]) {
+            if(node_dis+neighbour.second <dis[neighbour.first]) {
+                auto record =s.find(make_pair(dis[neighbour.first],neighbour.first));
+
+                if(record!=s.end()) {
+                    s.erase(record);
+                }
+                dis[neighbour.first]=node_dis+neighbour.second;
+                s.insert(make_pair(dis[neighbour.first],neighbour.first));
+
+
+            }
+        }
+    }
+    return dis;
+}
 
 int main() {
 
@@ -484,3 +528,4 @@ int main() {
     g.print_adjlist();
     return 0;
 }
+
