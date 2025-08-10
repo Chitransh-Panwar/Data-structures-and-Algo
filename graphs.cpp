@@ -4,6 +4,7 @@
 #include<vector>
 #include<queue>
 #include<stack>
+#include<set>
 #include<algorithm>
 #include<limits.h>
 
@@ -439,9 +440,11 @@ vector<int> shortpathfrom_source(int n,int source) {
             }
         }
     }
+
+     
+
 }
  
-
 //dijkistra,s algo
 vector<int> dajikistra(int n,int source) {
     unordered_map<int,list<pair<int,int>>> adj;
@@ -449,7 +452,7 @@ vector<int> dajikistra(int n,int source) {
 
     cout << "Enter number of edges: ";
     cin >> edges;
-    for(int i=0;i<n;i++) {
+    for(int i=0;i<edges;i++) {
         cout<<" enter u v and weight betwwen them :"<<endl;
         cin>>u>>v>>weight;
         pair<int,int> p=make_pair(v,weight);
@@ -463,6 +466,7 @@ vector<int> dajikistra(int n,int source) {
     }
 
     set<pair<int,int>> s;
+    s.insert({0,source});
     dis[source]=0;
 
     while(!s.empty()) {
@@ -528,4 +532,3 @@ int main() {
     g.print_adjlist();
     return 0;
 }
-
