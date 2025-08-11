@@ -460,11 +460,8 @@ vector<int> dajikistra(int n,int source) {
         adj[v].push_back(make_pair(u,weight));
     }
 
-    vector<int> dis(n);
-    for(int i=0;i<n;i++) {
-        dis[i]=INT_MAX;
-    }
-
+    vector<int> dis(n,INT_MAX);
+    
     set<pair<int,int>> s;
     s.insert({0,source});
     dis[source]=0;
@@ -491,6 +488,41 @@ vector<int> dajikistra(int n,int source) {
         }
     }
     return dis;
+}
+
+//Bellman ford algo
+//steps 
+//1.get adjecnt list
+//2.iterate upto n-1 times for the given condition in if else 
+//3.if it changes value in dis vector after n-1 times that means it has a negative weighted cycle in this directed garph
+
+int bellmanford(int n,int src,int des,int m,vector<vector<int>> edges) {
+    vector<int> dis(n,LLONG_MAX);
+    dis[src]=0;
+    for(int i=1;i<=n-1;i++) {
+        for(int j=0;j<m;j++) {
+            int u=edges[j][0];
+            int v=edges[j][1];
+            int w=edges[j][2];
+
+            if(dis[u]!=LLONG_MAX && (dis[u] + w <dis[v] ) ) {
+                dis[v]=w+dis[u];
+            }
+        }
+    }
+    //for cycle chk 
+    bool flag=0;
+    for(int j=0;j<m;j++) {
+            int u=edges[j][0];
+            int v=edges[j][1];
+            int w=edges[j][2];
+
+            if(dis[u]!=LLONG_MAX && (dis[u] + w <dis[v] ) ) {
+                flag=1;
+            }
+    }
+    if(flag==0) return dis[des];
+    return -1;
 }
 
 int main() {
@@ -532,3 +564,4 @@ int main() {
     g.print_adjlist();
     return 0;
 }
+
