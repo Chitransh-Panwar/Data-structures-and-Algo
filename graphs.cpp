@@ -560,6 +560,53 @@ void floyd_warshell(vector<vector<int>> matrix) {
     }
 }
 
+//prim algo
+//this algo coverts graph into a minimum spaning tree ie spaning treee= a tree version of graph which has n nodes and n-1  edges and must connect with every other node
+vector<pair<pair<int,int>,int>>  prim_algo(int n,int m ,vector<pair<pair<int,int>,int>> &edge) {
+    unordered_map<int,list<pair<int,int>>> adj;
+    for(int i=0;i<m;i++) {
+        int u=edge[i].first.first;
+        int v=edge[i].first.second;
+        int w=edge[i].second;
+        adj[u].push_back({v,w});
+        adj[v].push_back({u,w});
+    }
+
+    vector<int> key(n+1,INT_MAX);
+    vector<int> mst(n+1,false);
+    vector<int> parent(n+1,-1);
+    key[1]=0;
+    parent[1]=-1;
+    for(int i=1;i<n;i++ ) {
+        int mini=INT_MAX;
+        int u;
+        for(int v=1;v<=n;v++) {
+            if(mst[v]==false && key[v]<=mini) {
+                mini=key[v];
+                u=v;
+            }
+        }
+        mst[u]=true;
+        for(auto it :adj[u]) {
+            int v=it.first;
+            int w=it.second;
+            if(mst[v]==false && w<key[v]  ) {
+                key[v]=w;
+                parent[v]=u;
+            }
+            
+        }
+    }
+    vector<pair<pair<int,int>,int>> result;
+    for(int i=2;i<=n;i++) {
+        result.push_back({{parent[i],i},key[i]});
+    }
+
+    return result;
+
+    
+}
+
 int main() {
 
     // int n;
@@ -599,5 +646,6 @@ int main() {
     g.print_adjlist();
     return 0;
 }
+
 
 
